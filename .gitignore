@@ -1,0 +1,8 @@
+/target
+__pycache__/
+
+# Configuration
+/theia.toml
+/.env
+/.env.*
+!/.env.dist
