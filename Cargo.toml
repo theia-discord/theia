@@ -1,0 +1,44 @@
+[package]
+name = "theia"
+version = "0.1.0"
+edition = "2021"
+resolver = "2"
+publish = false
+
+[[bin]]
+name = "theia"
+path = "src/bin/theia.rs"
+
+[[bin]]
+name = "theia-dev"
+path = "src/bin/theia-dev.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.5"
+displaydoc = "0.2"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+color-eyre = "0.5"
+dotenv = "0.15"
+
+[dependencies.serenity]
+version = "0.10"
+default-features = false
+features = [
+    "cache",
+    "client",
+    "gateway",
+    "rustls_backend",
+    "model",
+]
+
+[dependencies.tokio]
+version = "1.0"
+features = [
+    "macros",
+    "process",
+    "io-util",
+    "rt-multi-thread",
+]
