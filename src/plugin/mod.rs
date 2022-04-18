@@ -21,7 +21,7 @@ pub use self::config::*;
 pub struct TheiaPlugin {
     pub path: PathBuf,
     pub config: TheiaPluginConfig,
-    pub data: HashMap<String, Value>,
+    pub cfgdata: HashMap<String, Value>,
 }
 
 impl TheiaPlugin {
@@ -50,17 +50,21 @@ impl TheiaPlugin {
         Ok(Self {
             path,
             config,
-            data: Default::default(),
+            cfgdata: Default::default(),
         })
     }
 
     pub async fn configure(&mut self, data: &HashMap<String, Value>) -> Result<(), TheiaError> {
-        self.data = data.clone();
+        self.cfgdata = data.clone();
         Ok(())
     }
 }
 
 impl<'a> TheiaPlugin {
+    pub fn name(&'a self) -> &'a str {
+        &self.config.name
+    }
+
     pub fn command_config<C: AsRef<str>>(
         &'a self,
         cmd_name: C,
@@ -140,7 +144,7 @@ impl<'a> TheiaPlugin {
         let mut responses = self
             .invoke(&[
                 TheiaPluginOutgoingMessage::bot_info(&ctx).await,
-                TheiaPluginOutgoingMessage::plugin_config(&self.config).await,
+                TheiaPluginOutgoingMessage::plugin_config(&self).await,
                 TheiaPluginOutgoingMessage::CommandInvoke {
                     cmd: cmd.clone(),
                     message: msg.clone(),

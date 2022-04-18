@@ -1,4 +1,3 @@
-use crate::plugin::TheiaPluginConfig;
 use crate::prelude::*;
 use ::serde::{Deserialize, Serialize};
 use ::serde_json::Value;
@@ -19,9 +18,14 @@ pub enum TheiaPluginOutgoingMessage {
     },
 
     PluginConfig {
-        #[serde(rename = "name")]
+        #[serde(rename = "plugin-name")]
         plugin_name: String,
-        config: HashMap<String, Value>,
+
+        #[serde(rename = "config-plugin")]
+        plugin_cfg: HashMap<String, Value>,
+
+        #[serde(rename = "config-bot")]
+        bot_cfg: HashMap<String, Value>
     },
 
     CommandInvoke {
@@ -46,10 +50,11 @@ impl TheiaPluginOutgoingMessage {
         }
     }
 
-    pub async fn plugin_config<'x>(cfg: &'x TheiaPluginConfig) -> Self {
+    pub async fn plugin_config<'p>(plugin: &'p TheiaPlugin) -> Self {
         Self::PluginConfig {
-            plugin_name: cfg.name.clone(),
-            config: cfg.cfgdata.clone(),
+            plugin_name: String::from(plugin.name()),
+            plugin_cfg: plugin.config.cfgdata.clone(),
+            bot_cfg: plugin.cfgdata.clone(),
         }
     }
 }
