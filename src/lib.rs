@@ -1,9 +1,10 @@
 //! The core of Theia.
 
+pub mod command;
 pub mod config;
+pub mod discord;
 pub mod error;
 pub mod event;
-pub mod interop;
 pub mod parser;
 pub mod plugin;
 pub mod typemap;

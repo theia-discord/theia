@@ -11,7 +11,9 @@ pub enum TheiaPluginOutgoingMessage {
         prefixes: Vec<String>,
         admin_users: Vec<String>,
         invite_url: Option<String>,
-        this_shard: u64,
+
+        #[serde(rename = "this_shard")]
+        shard_id: u64,
         total_shards: u64,
         plugins: Vec<String>,
         commands: Vec<(String, String)>,
@@ -25,11 +27,14 @@ pub enum TheiaPluginOutgoingMessage {
         plugin_cfg: HashMap<String, Value>,
 
         #[serde(rename = "config-bot")]
-        bot_cfg: HashMap<String, Value>
+        bot_cfg: HashMap<String, Value>,
+    },
+
+    Message {
+        message: TheiaDiscordMessage,
     },
 
     CommandInvoke {
-        cmd: CommandInvocation,
         message: TheiaDiscordMessage,
     },
 }
@@ -43,7 +48,7 @@ impl TheiaPluginOutgoingMessage {
             prefixes: theia.prefixes(),
             admin_users: theia.config.admin_users.clone(),
             invite_url: None,
-            this_shard: ctx.shard_id,
+            shard_id: ctx.shard_id,
             total_shards: theia.config.shard_count,
             plugins: theia.plugin_names(),
             commands: theia.plugin_command_summaries(),

@@ -1,4 +1,4 @@
-use crate::util::RunnableCommand;
+use crate::util::runnable::RunnableCommand;
 use ::serde::Deserialize;
 use ::serde_json::Value;
 use ::std::collections::HashMap;

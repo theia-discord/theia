@@ -75,7 +75,7 @@ impl<'a> TheiaPlugin {
             .find(|p| p.name == cmd_name.as_ref())
     }
 
-    pub async fn invoke(
+    pub async fn invoke_raw(
         &'a self,
         msgs: &[TheiaPluginOutgoingMessage],
     ) -> Result<Vec<TheiaPluginIncomingMessage>, TheiaError> {
@@ -135,22 +135,12 @@ impl<'a> TheiaPlugin {
         Ok(responses)
     }
 
-    pub async fn invoke_command<'x>(
+    pub async fn invoke<'ctx>(
         &'a self,
-        ctx: &'x SerenityContext,
-        cmd: &'x CommandInvocation,
-        msg: &'x TheiaDiscordMessage,
+        ctx: &'ctx SerenityContext,
+        msgs: &[TheiaPluginOutgoingMessage],
     ) -> Result<(), TheiaError> {
-        let mut responses = self
-            .invoke(&[
-                TheiaPluginOutgoingMessage::bot_info(&ctx).await,
-                TheiaPluginOutgoingMessage::plugin_config(&self).await,
-                TheiaPluginOutgoingMessage::CommandInvoke {
-                    cmd: cmd.clone(),
-                    message: msg.clone(),
-                },
-            ])
-            .await?;
+        let mut responses = self.invoke_raw(&msgs).await?;
 
         for resp in responses.iter_mut() {
             resp.process(&ctx).await?;

@@ -1,6 +1,9 @@
+//! Serde-compatible field for an executable + arguments
+
 use ::serde::{de, Deserialize};
 use ::std::fmt::{self, Formatter};
 
+/// Serde-compatible field for an executable + arguments
 #[derive(Debug, Clone)]
 pub struct RunnableCommand {
     pub command: String,
